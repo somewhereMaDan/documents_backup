@@ -1,0 +1,57 @@
+monolith -
+
+advantages
+1. for small teams 
+2. less complex (less moving parts)
+3. less duplication
+4. not and rpc call so no network call so it's a local call
+
+disadvantage
+1. more context required for any new member
+2. complicated deployment (any change in the code required new deployment and it'll require frequent deployment, not decoupled)
+3. too much responsiblity on each server (single point of failure)
+
+microservices -> 
+
+advantages
+1. easier to scale, each only concerned with it's data and interacting with each other
+2. less context needed (as services are decoupled)
+3. working in parallel development due to decoupling
+4. if we're seeing more load on a specific service we can put out more server to scale it (streamlined approach)
+
+Let's suppose s1 is only interacting with s2 and vice versa then it needs not be microservices (rpc call) we can do a function calling and microservice will not be good approach in this case
+
+
+
+Single Point of Failure (Master - Slave Architecture)
+Database Sharding
+
+
+age, gender, and location
+like we can't keep indexes on all three
+
+seperate table to do indexing for age, gender and location so it can efficient, which I think nosql does? like 1)
+
+using nosql - 1) cassandra / amazon dynamo db
+	      2) Sharding -> horizontal partitioning
+	      
+	      
+Bloom Filters -
+1) If username already exists bloom filter will tell it truthfull
+
+if(bloomfilter returns username already exists, checks collision) then return (False negatives are impossible)
+
+else "search db if it does not return "username already exists" 
+
+
+
+ECS Cluster is an logical group of ECS services and task that run within VPC
+Once VPC is created, we can create ECS cluster (ECS service and task go inside it)
+ECS service is in charge of managing, which manages the ECS task. ECS task is an running instance of an container which is created from task definition.
+In each microservice we will have ECS task that will run the container itself. ECS task manages the container.
+ECS task definition -> it defines how container should run including it's image, CPU and it's memory and any env.
+
+ALB ->
+- It routes external traffic to ECS services inside our VPC
+- It sites in the public subnet and forward requests to ECS services in private subnet
+- Secure entry point for internet traffic (such as frontend clients)

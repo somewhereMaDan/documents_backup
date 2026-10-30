@@ -1,0 +1,67 @@
+ Application
+     │
+     │ UPDATE
+     ▼
+┌──────────────┐
+│   Primary    │
+│              │
+│ PostgreSQL   │
+└──────┬───────┘
+       │
+       │ WAL records
+       ▼
+┌──────────────┐
+│   Replica    │
+│              │
+│ receives WAL │
+│ replays WAL  │
+└──────────────┘
+
+The replica is essentially saying:
+"Give me the changes after position X."
+
+Primary WAL:
+
+A ─ B ─ C ─ D ─ E ─ F ─ G
+                    ↑
+                 replica
+                 is here
+                 
+The primary sends:
+
+E → F → G
+
+The replica replays them.
+
+Then it is caught up.
+
+
+for ex - 
+So why does the screenshot show 41 on replicas?
+
+Your screenshot is demonstrating replication lag.
+
+Initially:
+
+PRIMARY:   likes = 41
+REPLICA 1: likes = 41
+REPLICA 2: likes = 41
+REPLICA 3: likes = 41
+
+For a short period you might have:
+
+PRIMARY:   42
+REPLICA 1: 41
+REPLICA 2: 41
+REPLICA 3: 41
+
+Then replication catches up:
+
+PRIMARY:   42
+REPLICA 1: 42
+REPLICA 2: 42
+REPLICA 3: 42
+
+That delay is called replication lag it depends on the system/load/network/configuration.
+
+
